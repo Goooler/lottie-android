@@ -26,7 +26,7 @@ class LottiefilesTabBar @JvmOverloads constructor(
     }
 
     @ModelProp(options = [ModelProp.Option.DoNotHash])
-    fun setPopularClickListener(listener: View.OnClickListener) {
+    fun setPopularClickListener(listener: OnClickListener) {
         binding.popularView.setOnClickListener(listener)
     }
 
