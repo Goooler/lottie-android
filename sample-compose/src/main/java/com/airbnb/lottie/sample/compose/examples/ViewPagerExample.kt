@@ -25,23 +25,19 @@ import com.google.accompanist.pager.rememberPagerState
 @Composable
 fun ViewPagerExamplePage() {
     val colors = listOf(Color.Red, Color.Green, Color.Blue, Color.Magenta)
-    val pagerState = rememberPagerState(pageCount = colors.size)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    val pagerState = rememberPagerState()
+    Box(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
-            pagerState,
-            flingBehavior = PagerDefaults.rememberPagerFlingConfig(
+            count = colors.size,
+            state = pagerState,
+            flingBehavior = PagerDefaults.flingBehavior(
                 pagerState,
                 decayAnimationSpec = exponentialDecay(frictionMultiplier = 0.05f)
             )
         ) { page ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors[page])
-            )
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(colors[page]))
         }
         WalkthroughAnimation(pagerState)
         HorizontalPagerIndicator(
@@ -61,7 +57,6 @@ private fun WalkthroughAnimation(pagerState: PagerState) {
     LottieAnimation(
         composition,
         progress,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     )
 }
