@@ -11,7 +11,7 @@ buildscript {
     kotlinVersion = '1.5.31'
     daggerVersion = '2.39.1'
     awsVersion = '2.8.3'
-    mockitoVersion = '3.12.4'
+    mockitoVersion = '4.0.0'
     robolectricVersion = '4.6.1'
     retrofitVersion = '2.9.0'
     materialVersion = '1.4.0'

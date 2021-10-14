@@ -5,10 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.graphics.Rect;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SparseArrayCompat;
-import com.airbnb.lottie.model.Font;
-import com.airbnb.lottie.model.FontCharacter;
-import com.airbnb.lottie.model.Marker;
-import com.airbnb.lottie.model.layer.Layer;
 import com.airbnb.lottie.utils.LottieValueAnimator;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +13,6 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.Assert.assertEquals;
@@ -60,10 +55,10 @@ public class LottieValueAnimatorUnitTest extends BaseTest {
 
   private LottieComposition createComposition(int startFrame, int endFrame) {
     LottieComposition composition = new LottieComposition();
-    composition.init(new Rect(), startFrame, endFrame, 1000, new ArrayList<Layer>(),
-            new LongSparseArray<Layer>(0), new HashMap<String, List<Layer>>(0),
-            new HashMap<String, LottieImageAsset>(0), new SparseArrayCompat<FontCharacter>(0),
-            new HashMap<String, Font>(0), new ArrayList<Marker>());
+    composition.init(new Rect(), startFrame, endFrame, 1000, new ArrayList<>(),
+        new LongSparseArray<>(0), new HashMap<>(0),
+        new HashMap<>(0), new SparseArrayCompat<>(0),
+        new HashMap<>(0), new ArrayList<>());
     return composition;
   }
 
@@ -183,65 +178,55 @@ public class LottieValueAnimatorUnitTest extends BaseTest {
 
   @Test
   public void testDefaultAnimator() {
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        inOrder.verify(spyListener, times(1)).onAnimationStart(animator, false);
-        inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, false);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-        Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
-      }
+    testAnimator(inOrder -> {
+      inOrder.verify(spyListener, times(1)).onAnimationStart(animator, false);
+      inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, false);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
+      Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
     });
   }
 
   @Test
   public void testReverseAnimator() {
     animator.reverseAnimationSpeed();
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        inOrder.verify(spyListener, times(1)).onAnimationStart(animator, true);
-        inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, true);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-        Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
-      }
+    testAnimator(inOrder -> {
+      inOrder.verify(spyListener, times(1)).onAnimationStart(animator, true);
+      inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, true);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
+      Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
     });
   }
 
   @Test
   public void testLoopingAnimatorOnce() {
     animator.setRepeatCount(1);
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
-        Mockito.verify(spyListener, times(1)).onAnimationRepeat(animator);
-        Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-      }
+    testAnimator(inOrder -> {
+      Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
+      Mockito.verify(spyListener, times(1)).onAnimationRepeat(animator);
+      Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
     });
   }
 
   @Test
   public void testLoopingAnimatorZeroTimes() {
     animator.setRepeatCount(0);
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
-        Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
-        Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-      }
+    testAnimator(inOrder -> {
+      Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
+      Mockito.verify(spyListener, times(0)).onAnimationRepeat(animator);
+      Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
     });
   }
 
   @Test
   public void testLoopingAnimatorTwice() {
     animator.setRepeatCount(2);
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
-        Mockito.verify(spyListener, times(2)).onAnimationRepeat(animator);
-        Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-      }
+    testAnimator(inOrder -> {
+      Mockito.verify(spyListener, times(1)).onAnimationStart(animator, false);
+      Mockito.verify(spyListener, times(2)).onAnimationRepeat(animator);
+      Mockito.verify(spyListener, times(1)).onAnimationEnd(animator, false);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
     });
   }
 
@@ -250,13 +235,11 @@ public class LottieValueAnimatorUnitTest extends BaseTest {
     animator.setFrame(1000);
     animator.setRepeatCount(1);
     animator.reverseAnimationSpeed();
-    testAnimator(new VerifyListener() {
-      @Override public void verify(InOrder inOrder) {
-        inOrder.verify(spyListener, times(1)).onAnimationStart(animator, true);
-        inOrder.verify(spyListener, times(1)).onAnimationRepeat(animator);
-        inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, true);
-        Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
-      }
+    testAnimator(inOrder -> {
+      inOrder.verify(spyListener, times(1)).onAnimationStart(animator, true);
+      inOrder.verify(spyListener, times(1)).onAnimationRepeat(animator);
+      inOrder.verify(spyListener, times(1)).onAnimationEnd(animator, true);
+      Mockito.verify(spyListener, times(0)).onAnimationCancel(animator);
     });
   }
 
